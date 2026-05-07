@@ -19,7 +19,7 @@ A suggested layout on your machine, especially if you handle more than one tenan
 <your-folder>/
 └── Organizations/           ← partner picks the name (Tenants/, Customers/, Clients/)
     ├── Acme/
-    │   ├── abc12345/        ← copy of this template, renamed to the tenant ID
+    │   ├── abc12345/        ← copy of this template (dt-remoteMCP), renamed to the tenant ID
     │   └── wxy98765/        ← another tenant for the same customer, another copy
     └── Globex/
         └── def67890/
