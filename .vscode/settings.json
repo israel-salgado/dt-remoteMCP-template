@@ -1,0 +1,17 @@
+{
+  // Auto-approve a small set of safe, read-only commands so they don't trigger
+  // a confirmation prompt every time the agent runs them. Patterns are regex
+  // (slash-delimited). Only add commands here that are clearly side-effect-free.
+  "chat.tools.terminal.autoApprove": {
+    "/^git status\\b.*/": true,
+    "/^git diff\\b.*/": true,
+    "/^git log\\b.*/": true,
+    "/^git branch\\b.*/": true,
+    "ConvertTo-Json": true,
+    "ConvertFrom-Json": true
+  },
+
+  // Make the auto-loaded instructions file in .github/ explicit (default true,
+  // listed for discoverability so contributors know the file is governing).
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true
+}
