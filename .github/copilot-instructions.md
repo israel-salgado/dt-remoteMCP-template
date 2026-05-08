@@ -14,15 +14,26 @@ On the first turn of every session, the agent emits one line identifying the act
 
 ```
 Active MCP server: <ServerName> · <env-host>
-If `dtctl` is also configured on this machine, the agent additionally emits:
-
-```
-Active dtctl context: <context-name> · <tenant-id>
 ```
 
-(Run `dtctl config current-context` to populate it. If `dtctl` is not installed or not configured, omit the line — do not treat its absence as an error.)
+**Detecting `dtctl`.** On the first turn, the agent runs **one** probe to decide what to emit about `dtctl`:
 
-```
+1. **Is the binary on PATH?** Run `dtctl version`. (Auto-approved via `.vscode/settings.json` so it doesn't prompt.) If it fails, `dtctl` is not installed — **omit any dtctl line entirely** and do not treat the absence as an error.
+
+The agent **does not** automatically run `dtctl config current-context` or any other dtctl command at session start. Reading the active context name leaks customer-identifying information onto the screen; we avoid it unless the user opts in.
+
+Based on probe 1, emit exactly one of:
+
+- `dtctl: installed` — binary present. Then immediately offer the user a clickable choice via `vscode_askQuestions` (per the *Clickable options for ALL user choices* rule) with options such as *Check & match dtctl context to this workspace's MCP tenant*, *Leave dtctl alone for this session*, *Cancel*. Only run `dtctl config current-context` (or any context-management command) if the user picks the check/match option.
+- *(omit the line)* — binary not found on PATH.
+
+Never describe `dtctl` as "not installed" unless the probe actually failed. **Never** run `dtctl config get-contexts` (or any other tenant-enumerating command) as part of this check — see the no-enumeration rule under *Tool routing*.
+
+**Never auto-add or auto-switch a `dtctl` context.** If the user opts in to the context check and the active context does not match this workspace's MCP tenant — or no context is selected — the agent **must** offer another clickable choice rather than running `dtctl config set-context` / `use-context` on its own. Suggested labelled options: *Add & switch dtctl context for this tenant*, *Switch to an existing dtctl context*, *Leave dtctl alone*, *Cancel*. Only proceed with whichever option the user clicks.
+
+When the agent does report on context match status, it **must not** print the context name. Use either the resolved tenant ID (only if obtainable without enumerating other contexts) or a plain `matches` / `does not match` statement. Context names are treated as sensitive — they often encode customer or project identifiers.
+
+Before presenting any context-management choice, the agent **must** point the user at the `dtctl` documentation so they can review setup and context-management semantics first: the local companion guide [DTCTL-WITH-MCP.md](../DTCTL-WITH-MCP.md) and the upstream [dtctl README](https://github.com/dynatrace-oss/dtctl#readme). Include both as plain clickable links in the message that precedes the `vscode_askQuestions` prompt.
 
 The agent does not auto-run anything else, does not auto-switch context, and does not assume tools are available until VS Code reports the server connected.
 

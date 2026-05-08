@@ -8,7 +8,8 @@
     "/^git log\\b.*/": true,
     "/^git branch\\b.*/": true,
     "ConvertTo-Json": true,
-    "ConvertFrom-Json": true
+    "ConvertFrom-Json": true,
+    "/^dtctl version$/": true
   },
 
   // Make the auto-loaded instructions file in .github/ explicit (default true,
