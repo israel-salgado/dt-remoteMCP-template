@@ -1,18 +1,18 @@
 {
   "inputs": [
     {
-      "id": "dt-token-abc12345",
+      "id": "dt-token-<token-name>",
       "type": "promptString",
-      "description": "Dynatrace Platform Token for abc12345 (prod, sprint, NFR, any description you like)",
+      "description": "Dynatrace Platform Token for <token_description>",
       "password": true
     }
   ],
   "servers": {
-    "mcp-servername": {
+    "mcp-<tenant-id>": {
       "type": "http",
-      "url": "https://abc12345.apps.dynatrace.com/platform-reserved/mcp-gateway/v0.1/servers/dynatrace-mcp/mcp",
+      "url": "https://<tenant-id>.apps.dynatrace.com/platform-reserved/mcp-gateway/v0.1/servers/dynatrace-mcp/mcp",
       "headers": {
-        "Authorization": "Bearer ${input:dt-token-abc12345}"
+        "Authorization": "Bearer ${input:dt-token-<token-name>}"
       }
     }
   }
