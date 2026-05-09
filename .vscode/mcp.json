@@ -8,7 +8,7 @@
     }
   ],
   "servers": {
-    "companyNICKNAME": {
+    "mcp-servername": {
       "type": "http",
       "url": "https://abc12345.apps.dynatrace.com/platform-reserved/mcp-gateway/v0.1/servers/dynatrace-mcp/mcp",
       "headers": {
